@@ -12,7 +12,7 @@ public class FileEntry : Gtk.ListBoxRow {
     public FileEntry(string path, IconSize size){
         var css_provider = new CssProvider();
         css_provider.load_from_resource("io/elementary/wingpanel/dropbox/indicator.css");
-        
+        string only_path = "";
         Grid grid = new Gtk.Grid();
         grid.orientation = Gtk.Orientation.HORIZONTAL;
         file_path = path;
@@ -24,8 +24,8 @@ public class FileEntry : Gtk.ListBoxRow {
             icon = new Gtk.Image.from_gicon (gicon, size);
             icon.margin = 6;
             icon.valign = Align.START;
-
             file_name = info.get_display_name ();
+            only_path = file_path.split(file_name)[0];
             file_path = file.get_path();
         } catch (Error e) {
             print (e.message);
@@ -44,12 +44,12 @@ public class FileEntry : Gtk.ListBoxRow {
         file_name_label.ellipsize = Pango.EllipsizeMode.END;
         file_name_label.max_width_chars = 40;
 
-        Label file_path_label = new Gtk.Label(file_path);
+        Label file_path_label = new Gtk.Label(only_path);
         file_path_label.halign = Gtk.Align.START;
         file_path_label.single_line_mode = true;
         file_path_label.lines = 0;
         file_path_label.ellipsize = Pango.EllipsizeMode.START;
-        file_path_label.max_width_chars = 40;
+        file_path_label.max_width_chars = 30;
         file_path_label.wrap = true;
         file_path_label.get_style_context().add_class ("path_text");
         file_path_label.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
