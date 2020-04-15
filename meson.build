@@ -30,6 +30,7 @@ shared_module(
     'src/Widgets/RecentFiles.vala',
     'src/Widgets/FileEntry.vala',
     'src/Widgets/FileEntryList.vala',
+    'src/Widgets/SearchHeader.vala',
     'src/Services/Dropbox.vala',
     asresources,
     dependencies: [
