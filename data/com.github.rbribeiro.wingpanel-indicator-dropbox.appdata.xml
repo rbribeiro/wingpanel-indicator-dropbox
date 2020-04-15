@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Rodrigo Ribeiro <you@email.com> -->
+<component type="desktop">
+  <id>com.github.rbribeiro.wingpanel-indicator-dropbox</id>
+  <metadata_license>CC0</metadata_license>
+  <name>Dropbox Indicator</name>
+  <summary>A simple dropbox indicator for wingpanel with a handy popover widget</summary>
+  <description>
+    <p>Dropbox indicator that lets you integrate dropbox into your Pantheon Desktop and mange your files</p>
+  </description>
+  <custom>
+    <value key="x-appcenter-color-primary">#0070e0</value>
+    <value key="x-appcenter-color-primary-text">rgb(255, 255, 255)</value>
+    <value key="x-appcenter-suggested-price">2</value>
+  </custom>
+</component>

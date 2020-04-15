@@ -1,0 +1,25 @@
+.dropbox-icon.uptodate {
+  animation: none;
+  -gtk-icon-source: -gtk-icontheme("dropbox-symbolic-x");
+}
+
+.search_header {
+  background-color : #3689e6
+}
+
+.popover {
+  background-color : #3689e6
+}
+
+.home_list {
+  background-color : #fff
+}
+
+.file_text {
+  font-size: 12px;
+  font-weight: 700
+}
+.path_text {
+  color : #333;
+  font-size: 10px
+}
