@@ -1,0 +1,63 @@
+using Gtk;
+
+public class FileEntry : Gtk.ListBoxRow {
+    public Gtk.Image icon;
+    public string file_path;
+    public string file_name;
+    
+    public FileEntry(string path, IconSize size){
+        Grid grid = new Gtk.Grid();
+        grid.orientation = Gtk.Orientation.HORIZONTAL;
+        file_path = path;
+        try {
+            File file =  File.new_for_path (path);
+            FileInfo info = file.query_info ("standard::*", 0);
+            Icon gicon = info.get_icon();
+
+            icon = new Gtk.Image.from_gicon (gicon, size);
+            icon.margin = 6;
+
+            file_name = info.get_display_name ();
+        } catch (Error e) {
+            print (e.message);
+        }
+
+        Grid file_attr_grid = new Gtk.Grid();
+        file_attr_grid.orientation = Gtk.Orientation.VERTICAL;
+
+        Label file_name_label = new Gtk.Label(file_name);
+        file_name_label.margin = 1;
+        file_name_label.use_markup = true;
+        file_name_label.halign = Gtk.Align.START;
+        file_name_label.single_line_mode = true;
+        file_name_label.lines = 0;
+        file_name_label.ellipsize = Pango.EllipsizeMode.END;
+        file_name_label.max_width_chars = 40;
+        file_name_label.set_markup ("<b>"+file_name+"</b>");
+
+        Label file_path_label = new Gtk.Label("");
+        file_path_label.margin = 1;
+        file_path_label.halign = Gtk.Align.START;
+        file_path_label.single_line_mode = true;
+        file_path_label.lines = 0;
+        file_path_label.ellipsize = Pango.EllipsizeMode.START;
+        file_path_label.use_markup = true;
+        file_path_label.max_width_chars = 40;
+        file_path_label.wrap = true;
+        file_path_label.set_markup ("<small>"+file_path+"</small>");
+
+        file_attr_grid.add (file_name_label);
+        file_attr_grid.add (file_path_label);
+
+        grid.add(icon);
+        grid.add(file_attr_grid);
+        add (grid);
+        grid.show_all();
+
+    }
+
+  public string get_file_path() {
+    return file_path;
+  }
+
+}
