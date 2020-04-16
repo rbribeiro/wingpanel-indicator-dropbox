@@ -49,7 +49,7 @@ public class RecentFiles : Gtk.Grid {
       string[] files = {""};
       string dropbox_folder = Dropbox.Services.Service.get_folder_path();
       // Excluding hidden files and directories
-      string find_cmd = "find "+dropbox_folder+" -not -path '*/\\.*' -iname *.* -ctime -" + days.to_string() +"";
+      string find_cmd = "find "+dropbox_folder+" -not -path '*/\\.*' -type f -ctime -" + days.to_string() +"";
       
       try {
         string res, err;
