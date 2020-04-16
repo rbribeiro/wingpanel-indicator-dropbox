@@ -5,9 +5,9 @@ public class RecentFiles : Gtk.Grid {
     public RecentFiles () {
       orientation = Gtk.Orientation.VERTICAL;
       expand = true;
-      Label time_stamp = new Gtk.Label("Last 7 days");
+      Label time_stamp = new Gtk.Label("Recent activity");
       time_stamp.use_markup = true;
-      time_stamp.set_markup ("<b>Last 7 days </b>");
+      time_stamp.set_markup ("<b>Recent activity </b>");
       time_stamp.halign = Gtk.Align.START;
       time_stamp.get_style_context().add_class("h3");
       time_stamp.margin_start = time_stamp.margin_bottom = 10;
@@ -15,7 +15,7 @@ public class RecentFiles : Gtk.Grid {
       FileEntryList file_list = new FileEntryList(null, IconSize.DND);
       file_list.hexpand = true;
       
-      string[] recent_files = get_recent_files(14);
+      string[] recent_files = get_recent_files(3);
       
       if (recent_files != null && recent_files[0] != "" && recent_files[0] != null) {
           halign = valign = Align.START;
@@ -48,7 +48,8 @@ public class RecentFiles : Gtk.Grid {
     private string[] get_recent_files (int days) {
       string[] files = {""};
       string dropbox_folder = Dropbox.Services.Service.get_folder_path();
-      string find_cmd = "find "+dropbox_folder+" -iname *.* -ctime -" + days.to_string() +"";
+      // Excluding hidden files and directories
+      string find_cmd = "find "+dropbox_folder+" -not -path '*/\\.*' -iname *.* -ctime -" + days.to_string() +"";
       
       try {
         string res, err;

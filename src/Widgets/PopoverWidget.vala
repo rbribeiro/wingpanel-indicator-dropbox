@@ -92,7 +92,8 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         
         if(text != "" && text != null) {
           try {
-            string find_command = "find " + path + " -iname *"+text+"*";
+            // Added options to exclude hidden files and
+            string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
               GLib.Process.spawn_command_line_sync (find_command, out out_res, out err_msg, out exit_st);
               result = out_res.split("\n");
           } catch (Error e) {
