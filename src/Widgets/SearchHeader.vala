@@ -21,7 +21,7 @@ public class SearchHeader : Gtk.Grid {
            open_folder_button.margin_end = 4;
            open_folder_button.clicked.connect (open_dropbox_folder);
            
-           open_dropbox_website_button = new Button.from_icon_name ("network-workgroup");
+           open_dropbox_website_button = new Button.from_icon_name ("emblem-web");
            open_dropbox_website_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
            open_dropbox_website_button.margin_start = 2;
            open_dropbox_website_button.clicked.connect (open_dropbox_website);
