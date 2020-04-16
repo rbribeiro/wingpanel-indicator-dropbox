@@ -47,12 +47,14 @@ public class FileEntry : Gtk.ListBoxRow {
         Label file_path_label = new Gtk.Label(only_path);
         file_path_label.halign = Gtk.Align.START;
         file_path_label.single_line_mode = true;
+        file_path_label.use_markup = true;
         file_path_label.lines = 0;
         file_path_label.ellipsize = Pango.EllipsizeMode.START;
         file_path_label.max_width_chars = 30;
         file_path_label.wrap = true;
         file_path_label.get_style_context().add_class ("path_text");
         file_path_label.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        file_path_label.set_markup ("<a href='file://"+only_path+"'>"+only_path+"</a>");
         
         share_button = new Button.from_icon_name ("emblem-shared", IconSize.SMALL_TOOLBAR);
         share_button.hexpand = false;
