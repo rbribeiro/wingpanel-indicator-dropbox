@@ -12,7 +12,7 @@ public class RecentFiles : Gtk.Grid {
       time_stamp.get_style_context().add_class("h3");
       time_stamp.margin_start = time_stamp.margin_bottom = 10;
       
-      FileEntryList file_list = new FileEntryList(null, IconSize.DND);
+      FileEntryList file_list = new FileEntryList(null,Dropbox.Services.Service.get_folder_path(), IconSize.DND);
       file_list.hexpand = true;
       
       string[] recent_files = get_recent_files(3);

@@ -39,7 +39,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     search_header.search_entry.search_changed.connect(on_search_changed);
     search_header.search_entry.stop_search.connect (on_search_stop);
 
-    search_results = new FileEntryList(null, IconSize.DND);
+    search_results = new FileEntryList(null, Dropbox.Services.Service.get_folder_path(), IconSize.DND);
     search_results.expand = true;
     search_results.can_focus = true;
     
