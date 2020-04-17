@@ -12,6 +12,8 @@ public class FileEntry : Gtk.ListBoxRow {
     public FileEntry(string path, IconSize size){
         var css_provider = new CssProvider();
         css_provider.load_from_resource("io/elementary/wingpanel/dropbox/indicator.css");
+        this.get_style_context().add_class("file_entry");
+        this.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         string only_path = "";
         Grid grid = new Gtk.Grid();
         grid.orientation = Gtk.Orientation.HORIZONTAL;
@@ -22,7 +24,8 @@ public class FileEntry : Gtk.ListBoxRow {
             Icon gicon = info.get_icon();
 
             icon = new Gtk.Image.from_gicon (gicon, size);
-            icon.margin = 6;
+            icon.get_style_context().add_class ("file_icon");
+            icon.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);            
             icon.valign = Align.START;
             file_name = info.get_display_name ();
             only_path = file_path.split(file_name)[0];
@@ -42,9 +45,10 @@ public class FileEntry : Gtk.ListBoxRow {
         file_name_label.single_line_mode = true;
         file_name_label.lines = 0;
         file_name_label.ellipsize = Pango.EllipsizeMode.END;
-        file_name_label.max_width_chars = 40;
+        file_name_label.max_width_chars = 30;
 
         Label file_path_label = new Gtk.Label(only_path);
+        file_path_label.track_visited_links = false;
         file_path_label.halign = Gtk.Align.START;
         file_path_label.single_line_mode = true;
         file_path_label.use_markup = true;
@@ -54,7 +58,7 @@ public class FileEntry : Gtk.ListBoxRow {
         file_path_label.wrap = true;
         file_path_label.get_style_context().add_class ("path_text");
         file_path_label.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-        file_path_label.set_markup ("<a href='file://"+only_path+"'>"+only_path+"</a>");
+        file_path_label.set_markup ("<a href='file://"+only_path+"'><span underline='none'>"+only_path+"</span></a>");
         
         share_button = new Button.from_icon_name ("emblem-shared", IconSize.SMALL_TOOLBAR);
         share_button.hexpand = false;

@@ -63,6 +63,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     //scrolledWindowHome.min_content_height = 300;
     
     RecentFiles recent_files = new RecentFiles();
+    recent_files.halign = Align.FILL;
     scrolledWindowHome.add (recent_files);
     
     stack.add_named(scrolledWindowHome, "home");
