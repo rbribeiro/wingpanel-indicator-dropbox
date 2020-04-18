@@ -25,9 +25,10 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
   private SearchHeader search_header;
   private FileEntryList search_results;
   private Stack stack;
+  private string dropbox_folder_path;
   
   public PopoverWidget () {
-    string dropbox_folder_path = Dropbox.Services.Service.get_folder_path();
+    dropbox_folder_path = Dropbox.Services.Service.get_folder_path();
     set_orientation (Gtk.Orientation.VERTICAL);
     width_request = 200;
     expand = true;
@@ -85,31 +86,38 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
   }
   
-  // Performs a search on the dropbox folder by using the FIND command
-   private string[] search_exec (string path, string text) {
-        string out_res, err_msg;
-        string[] result = null;
-        int exit_st;
+  // Performs an async search on the dropbox folder by using the FIND command
+   private async string[] search (string path, string text) throws ThreadError {
+        SourceFunc callback = search.callback;
+        string stdout = "";
+        string stderr = "";
+        int exit_st = 0;
+        string[] result = {""};
+        string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
+
+        ThreadFunc<bool> run = () => {
+            if(text != "" && text != null) {
+              try {
+                  GLib.Process.spawn_command_line_sync (find_command, out stdout, out stderr, out exit_st);
+                  result = stdout.split("\n");
+              } catch (Error e) {
+                print (e.message);
+                return false;
+              }
+            }
+            Idle.add ((owned)callback);
+            return true;
+        };
         
-        if(text != "" && text != null) {
-          try {
-            // Added options to exclude hidden files and
-            string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
-              GLib.Process.spawn_command_line_sync (find_command, out out_res, out err_msg, out exit_st);
-              result = out_res.split("\n");
-          } catch (Error e) {
-            print (e.message);
-            return result;
-          }
-        }
+        new Thread<bool>("search-thread", run);
+        yield;
         
        return result;
    }
    
-   private void on_search_changed () {
+   private async void on_search_changed () {
         string[] result = {};
         string search_string = search_header.search_entry.text;
-        string dropbox_folder = Dropbox.Services.Service.get_folder_path();
         if(search_header.search_entry.text == "") {
           stack.visible_child_name = "home";
         } else {
@@ -120,7 +128,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         }
         // Removing old elements
         search_results.remove_all();
-        result = search_exec(dropbox_folder, search_string);
+        result = yield search(dropbox_folder_path, search_string);
         
         if (result == null || result[0] == null) {
           var l = new Gtk.Label ("Nothing found!");
