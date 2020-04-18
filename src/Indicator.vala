@@ -34,8 +34,8 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
   construct {
     visible = true;
     service = new Dropbox.Services.Service ();
-    GLib.Timeout.add(2000, update);
-    
+    GLib.Timeout.add(2000, update, Priority.DEFAULT_IDLE);
+
   }
 
   public override Gtk.Widget get_display_widget () {
@@ -59,43 +59,60 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
     return popover_wigdet;
   }
 
-  public override void opened () {}
+    public override void opened () {}
 
-  public override void closed () {}
+    public override void closed () {}
 
-  public bool update () {
-    dropbox_status = service.get_dropbox_status ();
-    dropbox_full_status = service.get_dropbox_full_status ();
-    if (indicator_icon != null) {
-    
-      if (popover_wigdet != null) {
-        popover_wigdet.status_indicator.set_text (dropbox_full_status);
-        string status_icon = popover_wigdet.status_indicator.icon_list[dropbox_status+1];
-        popover_wigdet.status_indicator.set_icon_from_name (status_icon);
-      }
-      
-      string icon_name = "dropboxstatus-stopped-symbolic";
-      switch (dropbox_status) {
-        case Dropbox.Services.Service.DROP_BOX_STATUS_UNKNOWN:
-          icon_name = "dropboxstatus-stopped-symbolic";
-          break;
+    private void set_status (string[] status) {
+        string indicator_icon_name = "dropboxstatus-stopped-symbolic";
+        string popover_icon_name = "process-stop-symbolic";
+        
+        if (indicator_icon != null) {
+            if(popover_wigdet != null) {
+                popover_wigdet.status_indicator.set_text (status[0]);
+                popover_icon_name = popover_wigdet.status_indicator.icon_list[int.parse(status[1])+1];
+                popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
+            }
+            
+        switch (int.parse(status[1])) {
+          case Dropbox.Services.Service.DROP_BOX_STATUS_UNKNOWN:
+            indicator_icon_name = "dropboxstatus-stopped-symbolic";
+            break;
 
-        case Dropbox.Services.Service.DROP_BOX_STATUS_STOPPED:
-          icon_name = "dropboxstatus-stopped-symbolic";
-          break;
+          case Dropbox.Services.Service.DROP_BOX_STATUS_STOPPED:
+            indicator_icon_name = "dropboxstatus-stopped-symbolic";
+            break;
 
-        case Dropbox.Services.Service.DROP_BOX_STATUS_SYNCING:
-          icon_name = "dropboxstatus-busy-symbolic";
-          break;
+          case Dropbox.Services.Service.DROP_BOX_STATUS_SYNCING:
+            indicator_icon_name = "dropboxstatus-busy-symbolic";
+            break;
 
-        case Dropbox.Services.Service.DROP_BOX_STATUS_UPTODATE:
-          icon_name = "dropboxstatus-idle-symbolic";
-          break;
-      }
-       indicator_icon.set_main_icon_name (icon_name);
+          case Dropbox.Services.Service.DROP_BOX_STATUS_UPTODATE:
+            indicator_icon_name = "dropboxstatus-idle-symbolic";
+            break;
+        }
+        indicator_icon.set_main_icon_name (indicator_icon_name);
+
+        }
     }
+    
+    public bool update () {
+    string[] sts = {"", ""};
+  
+    service.get_status.begin((obj, res) => {
+          try {
+                sts = service.get_status.end(res);
+                if(dropbox_full_status != sts[0]) {
+                    set_status (sts);
+                }
+                
+          } catch (ThreadError e) {
+              print(e.message);
+          }
+      });
+  
     return true;
-  }
+    }
 }
 
 /*
