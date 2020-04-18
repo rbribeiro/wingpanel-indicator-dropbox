@@ -7,41 +7,58 @@ public class RecentFiles : Gtk.Grid {
     
     public string dir_path;
     
-    public RecentFiles (string path, int days) {
-        dir_path = path;
+    public RecentFiles (string dest_path, int days) {
+        dir_path = dest_path;
         orientation = Gtk.Orientation.VERTICAL;
         expand = true;
         
-        File f = File.new_for_path(path);
+        File f = File.new_for_path(dest_path);
         try {
             recent_files_monitor = f.monitor_directory(FileMonitorFlags.NONE, null);
-            recent_files_monitor.changed.connect ((src, dest, event) => {
-            populate (get_recent_files(path, 3));
-            });
+            recent_files_monitor.changed.connect (on_dropbox_folder_change);
         } catch (Error e) {
             print (e.message);
         }
-        string[] recent_files = get_recent_files(path, 3);
-        populate (recent_files);
+        string[] recent_files = {""};
+        
+        get_recent_files.begin(dest_path, 3, (obj, res) => {
+            try {
+                recent_files = get_recent_files.end(res);
+                populate (recent_files);
+            } catch (ThreadError e) {
+                print (e.message);
+            }
+        });
     }
     
-    private string[] get_recent_files (string path, int days) {
+    private async string[] get_recent_files (string dest_path, int days) throws ThreadError {
+      SourceFunc callback = get_recent_files.callback;
+      string stdout = "";
+      string stderr = "";
+      int exit_st = 0;
       string[] files = {""};
       // Excluding hidden files and directories
-      string find_cmd = "find "+path+" -not -path '*/\\.*' -type f -ctime -" + days.to_string() +"";
+      string find_cmd = "find "+dest_path+" -not -path '*/\\.*' -type f -ctime -" + days.to_string() +"";
       
-      try {
-        string res, err;
-        int ext;
-        Process.spawn_command_line_sync (find_cmd, out res, out err, out ext);
-        files = res.split("\n");
+      ThreadFunc<bool> run = () => {
+          try {
+            Process.spawn_command_line_sync (find_cmd, out stdout, out stderr, out exit_st);
+            files = stdout.split("\n");
+
+          } catch (Error e) {
+            print (e.message);
+            return false;
+          }
+          
+          Idle.add((owned)callback);
+          return true;
+        };
+        
+        new Thread<bool>("recent-files-search", run);
+        yield;
+        
         return files;
-      } catch (Error e) {
-        print (e.message);
-        return files;
-      }
-      
-    }
+     }
     
     private void populate (string[] files) {
         Label time_stamp = new Gtk.Label("Recent activity");
@@ -79,6 +96,18 @@ public class RecentFiles : Gtk.Grid {
             this.add (peaceful_text);
             this.add (info);
         }
+        
+        show_all();
+    }
+    
+    private async void on_dropbox_folder_change (FileMonitor fmonitor, File src, File? dest, FileMonitorEvent event) {
+            string[] files = {""};
+            try {
+                files = yield get_recent_files(this.dir_path, 3);
+                populate (files);
+            } catch (ThreadError e) {
+                print (e.message);
+            }
     }
     
 }
