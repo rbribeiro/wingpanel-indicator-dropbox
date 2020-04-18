@@ -38,6 +38,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
     search_header = new SearchHeader();
     search_header.search_entry.search_changed.connect(on_search_changed);
+    search_header.search_entry.grab_focus.connect(on_grab_focus);
     search_header.search_entry.stop_search.connect (on_search_stop);
 
     search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND);
@@ -153,4 +154,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
      stack.has_focus = true;
    }
    
+   private void on_grab_focus () {
+       stack.visible_child_name = "search";
+   }
 }
