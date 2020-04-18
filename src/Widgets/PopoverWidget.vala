@@ -65,6 +65,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
     RecentFiles recent_files = new RecentFiles(dropbox_folder_path, 3);
     recent_files.halign = Align.FILL;
+    
     scrolledWindowHome.add (recent_files);
     
     stack.add_named(scrolledWindowHome, "home");
@@ -128,7 +129,11 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         }
         // Removing old elements
         search_results.remove_all();
-        result = yield search(dropbox_folder_path, search_string);
+        try {
+            result = yield search(dropbox_folder_path, search_string);
+        } catch (ThreadError e) {
+            print (e.message);
+        }
         
         if (result == null || result[0] == null) {
           var l = new Gtk.Label ("Nothing found!");
