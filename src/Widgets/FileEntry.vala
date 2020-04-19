@@ -22,7 +22,7 @@ public class FileEntry : Gtk.ListBoxRow {
         file_path = path;
         try {
             File file =  File.new_for_path (path);
-            FileInfo info = file.query_info ("standard::*", 0);
+            FileInfo info = file.query_info ("*", 0);
             
             Icon gicon = info.get_icon();
             icon = new Gtk.Image.from_gicon (gicon, size);
