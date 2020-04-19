@@ -6,6 +6,7 @@ public class FileEntry : Gtk.ListBoxRow {
     public string file_name;
     public Button share_button;
     public Button bookmark_button;
+    public TimeVal modification_time;
     
     private Grid grid_buttons;
     
@@ -22,12 +23,14 @@ public class FileEntry : Gtk.ListBoxRow {
         try {
             File file =  File.new_for_path (path);
             FileInfo info = file.query_info ("standard::*", 0);
+            
             Icon gicon = info.get_icon();
-
             icon = new Gtk.Image.from_gicon (gicon, size);
             icon.get_style_context().add_class ("file_icon");
             icon.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);            
             icon.valign = Align.START;
+            
+            modification_time = info.get_modification_time();
             file_name = info.get_display_name ();
             only_path = file_path.split(file_name)[0];
             
