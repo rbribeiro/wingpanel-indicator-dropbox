@@ -6,7 +6,11 @@ public class FileEntryList : Gtk.ListBox {
     private IconSize icon_size = IconSize.SMALL_TOOLBAR;
     private string root_path_ignored;
     
-    public FileEntryList(string[]? path_list, string? root_path, IconSize? iconsize) {
+    public FileEntryList(string[]? path_list, string? root_path, IconSize? iconsize, bool? sorted) {
+        if (sorted) {
+        set_sort_func(sort_func);
+        }
+        
         icon_size = (iconsize != null) ? iconsize : icon_size;
         root_path_ignored = root_path;
         activate_on_single_click = false;
@@ -40,6 +44,22 @@ public class FileEntryList : Gtk.ListBox {
           } 
       }
     }
+    
+    private int sort_func (ListBoxRow row1, ListBoxRow row2) {
+        int result = 0;
+        if((row1 is FileEntry) && (row2 is FileEntry)) {
+        
+            var file1 = (FileEntry)row1;
+            var file2 = (FileEntry)row2;
+            
+            DateTime d1 = new DateTime.from_iso8601 (file1.modification_time.to_iso8601(), null);
+            DateTime d2 = new DateTime.from_iso8601 (file2.modification_time.to_iso8601(), null);
+            result = (-1)*d1.compare(d2);
+            
+        }
+        
+        return result;
+    } 
     
 
 

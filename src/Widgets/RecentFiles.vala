@@ -74,7 +74,7 @@ public class RecentFiles : Gtk.Grid {
         time_stamp.get_style_context().add_class("h3");
         time_stamp.margin_start = time_stamp.margin_bottom = 10;
         
-        file_list = new FileEntryList(null,dir_path, IconSize.DND);
+        file_list = new FileEntryList(null,dir_path, IconSize.DND, true);
         file_list.halign = Align.FILL;
         file_list.expand = true;
         

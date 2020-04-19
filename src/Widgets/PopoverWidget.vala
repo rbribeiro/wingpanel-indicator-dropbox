@@ -31,7 +31,6 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
   public PopoverWidget () {
     dropbox_folder_path = Dropbox.Services.Service.get_folder_path();
     set_orientation (Gtk.Orientation.VERTICAL);
-    width_request = 200;
     expand = true;
     
     css_provider = new CssProvider();
@@ -42,7 +41,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     search_header.search_entry.grab_focus.connect(on_grab_focus);
     search_header.search_entry.stop_search.connect (on_search_stop);
 
-    search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND);
+    search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND, false);
     search_results.expand = true;
     search_results.can_focus = true;
     
@@ -68,7 +67,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     scrolledWindowHome.max_content_height = 500;
     scrolledWindowHome.propagate_natural_height = true;
     
-    RecentFiles recent_files = new RecentFiles(dropbox_folder_path, 0);
+    RecentFiles recent_files = new RecentFiles(dropbox_folder_path, 3);
     recent_files.halign = Align.FILL;
     
     scrolledWindowHome.add (recent_files);
@@ -124,36 +123,40 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
    private async void on_search_changed () {
         string[] result = {};
         string search_string = search_header.search_entry.text;
-        if(search_header.search_entry.text == "") {
+        if(search_string == "") {
           stack.visible_child_name = "home";
         } else {
-          if(" " in search_header.search_entry.text) {
+          if(" " in search_string) {
             search_string = "'"+search_header.search_entry.text+"'";
           }
           stack.visible_child_name = "search";
         }
         
-        try {
-            result = yield search(dropbox_folder_path, search_string);
-        } catch (ThreadError e) {
-            print (e.message);
-        }
+        search.begin(dropbox_folder_path, search_string, (obj, res) => {
+            try {
+                result =  search.end(res); 
+              // Removing old elements
+              search_results.remove_all();
+              if (result == null || result[0] == null) {
+                var l = new Gtk.Label ("Nothing found!");
+                l.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
+                l.get_style_context().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+                l.get_style_context().add_class ("place_holder_large");
+                l.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+                search_results.add (l);
+                search_results.get_row_at_index (0).selectable = false;
+                search_results.show_all();
+              } else {
+                search_results.append_from_list (result);
+                search_results.show_all();
+              }
+            } catch (ThreadError e) {
+                print (e.message);
+            }
+        });
         
-        // Removing old elements
-        search_results.remove_all();
-        if (result == null || result[0] == null) {
-          var l = new Gtk.Label ("Nothing found!");
-          l.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
-          l.get_style_context().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
-          l.get_style_context().add_class ("place_holder_large");
-          l.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-          search_results.add (l);
-          search_results.get_row_at_index (0).selectable = false;
-          search_results.show_all();
-        } else {
-          search_results.append_from_list (result);
-          search_results.show_all();
-        }
+        
+  
    }
    
    private void on_search_stop () {
