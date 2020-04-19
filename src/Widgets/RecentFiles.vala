@@ -10,7 +10,7 @@ public class RecentFiles : Gtk.Grid {
     public RecentFiles (string dest_path, int days) {
         dir_path = dest_path;
         orientation = Gtk.Orientation.VERTICAL;
-        expand = true;
+        hexpand = true;
         
         File f = File.new_for_path(dest_path);
         try {
@@ -69,9 +69,11 @@ public class RecentFiles : Gtk.Grid {
         time_stamp.margin_start = time_stamp.margin_bottom = 10;
         
         file_list = new FileEntryList(null,dir_path, IconSize.DND);
+        file_list.halign = Align.FILL;
+        file_list.expand = true;
         
         if (files != null && files[0] != "" && files[0] != null) {
-            this.halign = this.valign = Align.START;
+            this.halign = this.valign = Align.FILL;
             
             this.foreach (child => {remove (child);});
             
@@ -104,6 +106,7 @@ public class RecentFiles : Gtk.Grid {
             string[] files = {""};
             try {
                 files = yield get_recent_files(this.dir_path, 3);
+                print (event.to_string()+"\n");
                 populate (files);
             } catch (ThreadError e) {
                 print (e.message);

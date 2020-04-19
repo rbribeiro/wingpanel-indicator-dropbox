@@ -46,6 +46,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     search_results.can_focus = true;
     
     stack = new Stack();
+    stack.halign = Align.FILL;
     stack.expand = true;
     stack.can_focus = true;
     stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
@@ -62,8 +63,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
     var scrolledWindowHome = new Gtk.ScrolledWindow(hadj2, vadj2);
     scrolledWindowHome.hscrollbar_policy = Gtk.PolicyType.NEVER;
-    //scrolledWindowHome.min_content_height = 300;
-    
+
     RecentFiles recent_files = new RecentFiles(dropbox_folder_path, 3);
     recent_files.halign = Align.FILL;
     
