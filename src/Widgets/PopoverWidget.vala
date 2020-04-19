@@ -132,14 +132,15 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
           }
           stack.visible_child_name = "search";
         }
-        // Removing old elements
-        search_results.remove_all();
+        
         try {
             result = yield search(dropbox_folder_path, search_string);
         } catch (ThreadError e) {
             print (e.message);
         }
         
+        // Removing old elements
+        search_results.remove_all();
         if (result == null || result[0] == null) {
           var l = new Gtk.Label ("Nothing found!");
           l.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
