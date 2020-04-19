@@ -4,11 +4,13 @@ public class RecentFiles : Gtk.Grid {
     
     private FileMonitor recent_files_monitor;
     private FileEntryList file_list;
+    private int time_day = 1;
     
     public string dir_path;
     
     public RecentFiles (string dest_path, int days) {
         dir_path = dest_path;
+        time_day = days;
         orientation = Gtk.Orientation.VERTICAL;
         hexpand = true;
         
@@ -21,7 +23,7 @@ public class RecentFiles : Gtk.Grid {
         }
         string[] recent_files = {""};
         
-        get_recent_files.begin(dest_path, 3, (obj, res) => {
+        get_recent_files.begin(dest_path, days, (obj, res) => {
             try {
                 recent_files = get_recent_files.end(res);
                 populate (recent_files);
@@ -61,6 +63,10 @@ public class RecentFiles : Gtk.Grid {
      }
     
     private void populate (string[] files) {
+        CssProvider css_provider = new CssProvider();
+        css_provider.load_from_resource("io/elementary/wingpanel/dropbox/indicator.css");
+
+
         Label time_stamp = new Gtk.Label("Recent activity");
         time_stamp.use_markup = true;
         time_stamp.set_markup ("<b>Recent activity </b>");
@@ -85,17 +91,15 @@ public class RecentFiles : Gtk.Grid {
             this.foreach (child => {remove (child);});
             this.halign = this.valign = Align.CENTER;
             
-            Image peaceful_img = new Image.from_icon_name ("face-smile-symbolic", IconSize.DIALOG);
-            peaceful_img.pixel_size = 128;
+            //Image peaceful_img = new Image.from_icon_name ("face-smile-symbolic", IconSize.DIALOG);
+            //peaceful_img.pixel_size = 128;
             
-            Label peaceful_text = new Label ("");
-            peaceful_text.use_markup = true;
-            peaceful_text.set_markup ("<b>It has been quite peaceful here!</b>");
+            Label info = new Label("No activity");
+            info.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
+            info.get_style_context().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+            info.get_style_context().add_class ("place_holder_large");
+            info.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             
-            Label info = new Label("No activity in the past 7 days.");
-            
-            this.add (peaceful_img);
-            this.add (peaceful_text);
             this.add (info);
         }
         
@@ -105,7 +109,7 @@ public class RecentFiles : Gtk.Grid {
     private async void on_dropbox_folder_change (FileMonitor fmonitor, File src, File? dest, FileMonitorEvent event) {
             string[] files = {""};
             try {
-                files = yield get_recent_files(this.dir_path, 3);
+                files = yield get_recent_files(this.dir_path, this.time_day);
                 print (event.to_string()+"\n");
                 populate (files);
             } catch (ThreadError e) {
