@@ -44,6 +44,7 @@ public class FileEntryList : Gtk.Grid {
         less_results_btn.no_show_all = true;
         less_results_btn.clicked.connect(show_less_results);
         less_results_btn.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        less_results_btn.get_style_context().add_class("h4");
 
         title = new Gtk.Label("");
         title.halign = Gtk.Align.START;
@@ -94,6 +95,7 @@ public class FileEntryList : Gtk.Grid {
             if(max_results < files_string_list.length) {
                 file_list_current_last_index = max_results;
                 more_results_btn.show_now();
+                more_results_btn.label =  "More results (" + max_results.to_string() + "/"+files_string_list.length.to_string()+")";
                 less_results_btn.hide();
             }
         }
@@ -145,6 +147,7 @@ public class FileEntryList : Gtk.Grid {
          if (start < files_string_list.length) {
              append_from_list(files_string_list[start:end]);
              file_list_current_last_index = end;
+             more_results_btn.label = "More results ("+end.to_string()+"/"+files_string_list.length.to_string()+")";
              listbox.show_all();
          }
      }
