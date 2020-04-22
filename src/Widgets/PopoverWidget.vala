@@ -38,12 +38,12 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
     search_header = new SearchHeader();
     search_header.search_entry.search_changed.connect(on_search_changed);
-    search_header.search_entry.grab_focus.connect(on_grab_focus);
     search_header.search_entry.stop_search.connect (on_search_stop);
 
-    search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND, false);
+    search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND, false, 10);
     search_results.expand = true;
     search_results.can_focus = true;
+    search_results.placeholder.label = "No Results!";
     
     stack = new Stack();
     stack.halign = Align.FILL;
@@ -99,22 +99,26 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         int exit_st = 0;
         string[] result = {""};
         string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
-
+        
+        // We execute the find command on a new thread so we do not block the GUI.
         ThreadFunc<bool> run = () => {
             if(text != "" && text != null) {
               try {
                   GLib.Process.spawn_command_line_sync (find_command, out stdout, out stderr, out exit_st);
                   result = stdout.split("\n");
+                  result = (result.length > 0) ? result[0:result.length-1] : result;
               } catch (Error e) {
                 print (e.message);
                 return false;
               }
             }
+            // We add our callback to the idle queue so the processor come back when it is idle
             Idle.add ((owned)callback);
             return true;
         };
-        
+        //execute the new thread
         new Thread<bool>("search-thread", run);
+        // Free the processor
         yield;
         
        return result;
@@ -135,21 +139,15 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         search.begin(dropbox_folder_path, search_string, (obj, res) => {
             try {
                 result =  search.end(res); 
-              // Removing old elements
-              search_results.remove_all();
-              if (result == null || result[0] == null) {
-                var l = new Gtk.Label ("Nothing found!");
-                l.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
-                l.get_style_context().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
-                l.get_style_context().add_class ("place_holder_large");
-                l.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-                search_results.add (l);
-                search_results.get_row_at_index (0).selectable = false;
-                search_results.show_all();
-              } else {
-                search_results.append_from_list (result);
-                search_results.show_all();
-              }
+                print("Result:"+result.length.to_string());
+                if(result[0] != "" && result.length > 0) {
+                    // Removing old elements
+                    search_results.remove_all();
+                    search_results.populate (result);
+                    search_results.show_all();
+                } else {
+                    search_results.remove_all();
+                }
             } catch (ThreadError e) {
                 print (e.message);
             }
@@ -166,7 +164,4 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
      stack.has_focus = true;
    }
    
-   private void on_grab_focus () {
-       //stack.visible_child_name = "search";
-   }
 }
