@@ -1,21 +1,71 @@
 using Gtk;
 
-public class FileEntryList : Gtk.ListBox {
+public class FileEntryList : Gtk.Grid {
     
-    public string[] file_path_list;
+    public string[] files_string_list;
     private IconSize icon_size = IconSize.SMALL_TOOLBAR;
     private string root_path_ignored;
+    private int max_results = 7;
+    private int file_list_current_last_index = 0;
+    private Button more_results_btn;
+    private Button less_results_btn;
     
-    public FileEntryList(string[]? path_list, string? root_path, IconSize? iconsize, bool? sorted) {
+    public Label placeholder;
+    public Label title;
+    
+    public ListBox listbox;
+    
+    public FileEntryList(string[]? path_list, string? root_path, IconSize? iconsize, bool? sorted, int max_results_p) {
+        CssProvider css_provider = new CssProvider();
+        css_provider.load_from_resource("io/elementary/wingpanel/dropbox/indicator.css");
+        
+        files_string_list = path_list;
+        max_results = max_results_p;
+        
+        listbox = new ListBox();
+        listbox.activate_on_single_click = false;
+        listbox.row_activated.connect(double_click);
+        listbox.hexpand = true;
+        
         if (sorted) {
-        set_sort_func(sort_func);
+        listbox.set_sort_func(sort_func);
         }
         
         icon_size = (iconsize != null) ? iconsize : icon_size;
         root_path_ignored = root_path;
-        activate_on_single_click = false;
-        row_activated.connect(double_click);
-        append_from_list (path_list);
+        
+        more_results_btn = new Button.with_label ("More results");
+        more_results_btn.clicked.connect (show_more_results);
+        more_results_btn.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        more_results_btn.get_style_context().add_class("h4");
+        more_results_btn.no_show_all = true;
+        
+        less_results_btn = new Button.with_label("Less results");
+        less_results_btn.no_show_all = true;
+        less_results_btn.clicked.connect(show_less_results);
+        less_results_btn.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+
+        title = new Gtk.Label("");
+        title.halign = Gtk.Align.START;
+        title.get_style_context().add_class("h3");
+        title.margin_start = title.margin_bottom = 10;
+        title.no_show_all = true;
+        
+        placeholder = new Label("Placeholder..");
+        placeholder.get_style_context().add_class (Granite.STYLE_CLASS_H2_LABEL);
+        placeholder.get_style_context().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+        placeholder.get_style_context().add_class ("place_holder_large");
+        placeholder.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        placeholder.show();
+        listbox.set_placeholder (placeholder);
+        
+        orientation = Gtk.Orientation.VERTICAL;
+        this.add(title);
+        this.add(listbox);
+        this.add(more_results_btn);
+        this.add(less_results_btn);
+        this.append_from_list (path_list[0:max_results]);
+        
     }
     
     private void double_click (ListBoxRow row) {
@@ -30,18 +80,40 @@ public class FileEntryList : Gtk.ListBox {
     }
     
     public void remove_all() {
-      this.foreach(row => {this.remove(row);});
+      listbox.foreach(row => {row.destroy();});
+      more_results_btn.hide();
+      less_results_btn.hide();
+    }
+    
+    public void populate (string[] list) {
+        files_string_list = list;
+        remove_all();
+        if(files_string_list != null && files_string_list.length > 0) {
+            string[] new_list = (max_results < files_string_list.length) ? files_string_list[0:max_results] : files_string_list;
+            append_from_list(new_list);
+            if(max_results < files_string_list.length) {
+                file_list_current_last_index = max_results;
+                more_results_btn.show_now();
+                less_results_btn.hide();
+            }
+        }
     }
     
     public void append_from_list (string[] path_list) {
-      if(path_list != null) {
-          foreach (string path in path_list) {
-            if(path != "") {
-              FileEntry file = new FileEntry(path, root_path_ignored, icon_size);
+      if(path_list != null && path_list.length > 0) {
+          foreach (string file_path in path_list) {
+            if(file_path != "") {
+              FileEntry file = new FileEntry(file_path, root_path_ignored, icon_size);
               file.has_tooltip = true;
-              add(file);
+              listbox.add(file);
             }
-          } 
+          }
+          if(max_results < path_list.length) {
+              file_list_current_last_index = max_results;
+              more_results_btn.show_now();
+              less_results_btn.hide();
+          }
+         listbox.show_all();
       }
     }
     
@@ -61,6 +133,25 @@ public class FileEntryList : Gtk.ListBox {
         return result;
     } 
     
+     private void show_more_results() {
+         int start = file_list_current_last_index;
+         int end = (int)Math.fmin(start+max_results, files_string_list.length);
 
+         print("end: "+end.to_string()+". Total: "+files_string_list.length.to_string());
+         if(end == files_string_list.length) {
+             less_results_btn.show_now();
+             more_results_btn.hide();
+         }
+         if (start < files_string_list.length) {
+             append_from_list(files_string_list[start:end]);
+             file_list_current_last_index = end;
+             listbox.show_all();
+         }
+     }
+
+     private void show_less_results() {
+        populate(files_string_list);
+        less_results_btn.hide();
+     }
 
 }
