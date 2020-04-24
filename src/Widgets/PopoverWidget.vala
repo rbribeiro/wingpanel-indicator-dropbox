@@ -21,6 +21,7 @@ using Gtk;
 public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
   public StatusIndicator status_indicator;
   public Wingpanel.Widgets.Switch theme_switch;
+  public RecentFiles recent_files;
   
   private SearchHeader search_header;
   private FileEntryList search_results;
@@ -67,7 +68,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     scrolledWindowHome.max_content_height = 500;
     scrolledWindowHome.propagate_natural_height = true;
     
-    RecentFiles recent_files = new RecentFiles(dropbox_folder_path, 3);
+    recent_files = new RecentFiles(dropbox_folder_path, 3);
     recent_files.halign = Align.FILL;
     
     scrolledWindowHome.add (recent_files);
