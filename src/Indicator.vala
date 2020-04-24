@@ -103,6 +103,11 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
           try {
                 sts = service.get_status.end(res);
                 if(dropbox_full_status != sts[0]) {
+                    // refreshing the list of recent files
+                    if (dropbox_full_status == "Up to date" && popover_wigdet != null) {
+                        popover_wigdet.recent_files.refresh();
+                    }
+                    dropbox_full_status = sts[0];
                     set_status (sts);
                 }
                 
