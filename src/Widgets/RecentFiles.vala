@@ -68,4 +68,20 @@ public class RecentFiles : Gtk.Grid {
 
         return files;
      }
+     
+     public void refresh() {
+        string[] result = {""};
+         get_recent_files.begin(dir_path, time_day, (obj, res) => {
+             try {
+                 result = get_recent_files.end(res);
+                 if (result != null && result[0] != "" && result[0] != null) {
+                     file_list.populate (result);
+                     file_list.title.label = "Recent Activity";
+                     file_list.title.show();
+                 }
+             } catch (ThreadError e) {
+                 print (e.message);
+             }
+         });
+     }
 }
