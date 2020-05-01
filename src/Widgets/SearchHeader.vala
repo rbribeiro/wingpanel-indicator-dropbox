@@ -21,7 +21,7 @@ public class SearchHeader : Gtk.Grid {
            spinner.active = true;
            spin_revealer = new Revealer();
            spin_revealer.transition_type = RevealerTransitionType.SLIDE_LEFT;
-           spin_revealer.transition_duration = 50;
+           spin_revealer.transition_duration = 100;
            spin_revealer.add(spinner);
            spin_revealer.reveal_child = false;
            
