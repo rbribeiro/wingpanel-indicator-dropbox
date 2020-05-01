@@ -4,7 +4,7 @@ public class StatusIndicator : Gtk.Grid {
     public Label label;
     public Image icon;
     public string[] icon_list = {"process-stop-symbolic", "process-stop-symbolic", "process-working-symbolic", "process-completed-symbolic"};
-    
+    private Spinner spin;
     public StatusIndicator (string? icon_name, string? text) {
        
         orientation = Gtk.Orientation.HORIZONTAL;
@@ -20,6 +20,13 @@ public class StatusIndicator : Gtk.Grid {
 
         icon = new Gtk.Image.from_icon_name (icon_name,Gtk.IconSize.SMALL_TOOLBAR);
         icon.margin_end = 6;
+        
+        spin = new Spinner();
+        spin.no_show_all = true;
+        spin.active = true;
+        spin.margin_end = 6;
+        
+        add (spin);
         add(icon);
         add(label);
     }
@@ -29,6 +36,13 @@ public class StatusIndicator : Gtk.Grid {
     }
     
     public void set_icon_from_name (string name ) {
-        icon.icon_name = name;
+        if(name == "process-working-symbolic") {
+            spin.show_now();
+            icon.hide();
+        } else {
+            icon.icon_name = name;
+            icon.show_now();
+            spin.hide();
+        }
     }
 }
