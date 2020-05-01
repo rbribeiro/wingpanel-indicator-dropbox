@@ -105,9 +105,13 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         ThreadFunc<bool> run = () => {
             if(text != "" && text != null) {
               try {
+                  search_header.spin_revealer.set_reveal_child (true);
+                
                   GLib.Process.spawn_command_line_sync (find_command, out stdout, out stderr, out exit_st);
                   result = stdout.split("\n");
                   result = (result.length > 0) ? result[0:result.length-1] : result;
+                  search_header.spin_revealer.set_reveal_child (false);
+                  
               } catch (Error e) {
                 print (e.message);
                 return false;

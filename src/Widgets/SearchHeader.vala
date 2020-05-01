@@ -4,6 +4,7 @@ public class SearchHeader : Gtk.Grid {
     public SearchEntry search_entry;
     public Button open_folder_button;
     public Button open_dropbox_website_button;
+    public Revealer spin_revealer;
     
     public SearchHeader() {
            var css_provider = new CssProvider();
@@ -15,6 +16,14 @@ public class SearchHeader : Gtk.Grid {
            search_entry.margin_top = 10;
            search_entry.margin_bottom = 10;
            search_entry.placeholder_text = "Search on Dropbox";
+           
+           Spinner spinner = new Spinner();
+           spinner.active = true;
+           spin_revealer = new Revealer();
+           spin_revealer.transition_type = RevealerTransitionType.SLIDE_LEFT;
+           spin_revealer.transition_duration = 50;
+           spin_revealer.add(spinner);
+           spin_revealer.reveal_child = false;
            
            open_folder_button = new Button.from_icon_name ("folder");
            open_folder_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -31,6 +40,7 @@ public class SearchHeader : Gtk.Grid {
            orientation = Gtk.Orientation.HORIZONTAL;
            hexpand = true;
            add (search_entry);
+           add (spin_revealer);
            add (open_dropbox_website_button);
            add (open_folder_button);
     }
