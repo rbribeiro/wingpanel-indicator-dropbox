@@ -54,8 +54,11 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
     if (popover_wigdet == null) {
       popover_wigdet = new Dropbox.Widgets.PopoverWidget ();
       popover_wigdet.status_indicator.set_text (dropbox_full_status);
+      string popover_icon_name = popover_wigdet.status_indicator.icon_list[dropbox_status+1];
+      popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
       
     }
+    
     return popover_wigdet;
   }
 
@@ -103,11 +106,8 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
           try {
                 sts = service.get_status.end(res);
                 if(dropbox_full_status != sts[0]) {
-                    // refreshing the list of recent files
-                    if (dropbox_full_status == "Up to date" && popover_wigdet != null) {
-                        popover_wigdet.recent_files.refresh();
-                    }
                     dropbox_full_status = sts[0];
+                    dropbox_status = int.parse(sts[1]);
                     set_status (sts);
                 }
                 
