@@ -9,6 +9,7 @@ public class FileEntryList : Gtk.Grid {
     private int file_list_current_last_index = 0;
     private Button more_results_btn;
     private Button less_results_btn;
+    private Spinner spinner;
     
     public Label placeholder;
     public Label title;
@@ -21,6 +22,9 @@ public class FileEntryList : Gtk.Grid {
         
         files_string_list = path_list;
         max_results = max_results_p;
+        
+        spinner = new Spinner();
+        spinner.active = true;
         
         listbox = new ListBox();
         listbox.activate_on_single_click = false;
@@ -155,6 +159,17 @@ public class FileEntryList : Gtk.Grid {
      private void show_less_results() {
         populate(files_string_list);
         less_results_btn.hide();
+     }
+     
+     public void set_loading_state (bool state) {
+         if (state) {
+            spinner.active = true;
+            spinner.show();
+            listbox.set_placeholder (spinner);
+         } else {
+            spinner.active = false;
+             listbox.set_placeholder (placeholder);
+         }
      }
 
 }
