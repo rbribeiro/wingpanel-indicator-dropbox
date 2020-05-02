@@ -32,6 +32,7 @@ shared_module(
     'src/Widgets/FileEntryList.vala',
     'src/Widgets/SearchHeader.vala',
     'src/Services/Dropbox.vala',
+    'src/Services/DirMonitor.vala',
     asresources,
     dependencies: [
         dependency('gtk+-3.0'),
