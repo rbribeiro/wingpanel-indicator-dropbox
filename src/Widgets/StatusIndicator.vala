@@ -20,6 +20,7 @@ public class StatusIndicator : Gtk.Grid {
 
         icon = new Gtk.Image.from_icon_name (icon_name,Gtk.IconSize.SMALL_TOOLBAR);
         icon.margin_end = 6;
+        icon.no_show_all = true;
         
         spin = new Spinner();
         spin.no_show_all = true;
