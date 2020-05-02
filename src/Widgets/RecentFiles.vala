@@ -39,6 +39,14 @@ public class RecentFiles : Gtk.Grid {
                 print (e.message);
             }
         });
+        
+        DirMonitor dir_monitor = new DirMonitor (dest_path, 1000);
+        dir_monitor.changed.connect ((f) => {
+            this.refresh();
+            print (f.get_name());
+        });
+        
+        dir_monitor.run();
     }
 
     private async string[] get_recent_files (string dest_path, int days) throws ThreadError {
