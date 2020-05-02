@@ -63,9 +63,9 @@ public class FileEntryList : Gtk.Grid {
         orientation = Gtk.Orientation.VERTICAL;
         this.add(title);
         this.add(listbox);
-        this.add(more_results_btn);
         this.add(less_results_btn);
-        this.append_from_list (path_list[0:max_results]);
+        this.add(more_results_btn);
+        this.populate (path_list);
         
     }
     
@@ -96,7 +96,6 @@ public class FileEntryList : Gtk.Grid {
                 file_list_current_last_index = max_results;
                 more_results_btn.show_now();
                 more_results_btn.label =  "More results (" + max_results.to_string() + "/"+files_string_list.length.to_string()+")";
-                less_results_btn.hide();
             }
         }
     }
@@ -110,10 +109,11 @@ public class FileEntryList : Gtk.Grid {
               listbox.add(file);
             }
           }
+          
           if(max_results < path_list.length) {
               file_list_current_last_index = max_results;
+              less_results_btn.show_now();
               more_results_btn.show_now();
-              less_results_btn.hide();
           }
          listbox.show_all();
       }
@@ -139,7 +139,6 @@ public class FileEntryList : Gtk.Grid {
          int start = file_list_current_last_index;
          int end = (int)Math.fmin(start+max_results, files_string_list.length);
 
-         print("end: "+end.to_string()+". Total: "+files_string_list.length.to_string());
          if(end == files_string_list.length) {
              less_results_btn.show_now();
              more_results_btn.hide();
@@ -147,6 +146,7 @@ public class FileEntryList : Gtk.Grid {
          if (start < files_string_list.length) {
              append_from_list(files_string_list[start:end]);
              file_list_current_last_index = end;
+             less_results_btn.show_now();
              more_results_btn.label = "More results ("+end.to_string()+"/"+files_string_list.length.to_string()+")";
              listbox.show_all();
          }
