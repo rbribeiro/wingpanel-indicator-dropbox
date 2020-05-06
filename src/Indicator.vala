@@ -112,7 +112,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
                 }
                 
           } catch (ThreadError e) {
-              print(e.message);
+              print("Error getting dropbox status: %s",e.message);
           }
       });
   

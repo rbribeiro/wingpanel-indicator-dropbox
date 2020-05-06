@@ -40,10 +40,10 @@ public class RecentFiles : Gtk.Grid {
             }
         });
         
-        DirMonitor dir_monitor = new DirMonitor (dest_path, 1000);
+        DirMonitor dir_monitor = new DirMonitor (dest_path, 500);
         dir_monitor.changed.connect ((f) => {
+            print ("Refreshing the recent files. File changed:"+f.get_name());
             this.refresh();
-            print (f.get_name());
         });
         
         dir_monitor.run();
@@ -93,7 +93,7 @@ public class RecentFiles : Gtk.Grid {
                      file_list.title.show();
                  }
              } catch (ThreadError e) {
-                 print (e.message);
+                 print ("Error refreshing: %s", e.message);
              }
          });
      }
