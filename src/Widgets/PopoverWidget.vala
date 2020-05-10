@@ -99,7 +99,8 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
         string stderr = "";
         int exit_st = 0;
         string[] result = {""};
-        string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
+        string find_command = string.join("","find ",path," -not -path '*/\\.*' -iname *",text,"*");
+        //string find_command = "find " + path + " -not -path '*/\\.*' -iname *"+text+"*";
         
         // We execute the find command on a new thread so we do not block the GUI.
         ThreadFunc<bool> run = () => {

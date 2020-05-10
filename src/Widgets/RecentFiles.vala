@@ -40,13 +40,7 @@ public class RecentFiles : Gtk.Grid {
             }
         });
         
-        DirMonitor dir_monitor = new DirMonitor (dest_path, 500);
-        dir_monitor.changed.connect ((f) => {
-            print ("Refreshing the recent files. File changed:"+f.get_name());
-            this.refresh();
-        });
-        
-        dir_monitor.run();
+      
     }
 
     private async string[] get_recent_files (string dest_path, int days) throws ThreadError {
@@ -56,7 +50,7 @@ public class RecentFiles : Gtk.Grid {
       int exit_st = 0;
       string[] files = {""};
       // Excluding hidden files and directories
-      string find_cmd = "find "+dest_path+" -not -path '*/\\.*' -type f -ctime -" + days.to_string() +"";
+      string find_cmd = string.join(" ", "find",dest_path,"-not -path '*/\\.*' -type f -ctime","-"+days.to_string());
 
       ThreadFunc<bool> run = () => {
           try {
@@ -84,13 +78,19 @@ public class RecentFiles : Gtk.Grid {
      
      public void refresh() {
         string[] result = {""};
+        print ("Lets get the recent files then!\n");
          get_recent_files.begin(dir_path, time_day, (obj, res) => {
              try {
+                print("Lets set the results");
                  result = get_recent_files.end(res);
                  if (result != null && result[0] != "" && result[0] != null) {
+                    print ("Trying to populate\n");
                      file_list.populate (result);
+                     print ("setting label\n");
                      file_list.title.label = "Recent Activity";
+                     print ("Showing\n");
                      file_list.title.show();
+                     print ("label showed.\n");
                  }
              } catch (ThreadError e) {
                  print ("Error refreshing: %s", e.message);
