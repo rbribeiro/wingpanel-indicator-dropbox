@@ -46,7 +46,7 @@ public class DirMonitor : GLib.Object {
                 return true;
                 
             } catch (Error e) {
-                print (e.message);
+                print ("Error getting info: %s",e.message);
                 return false;
             }
 
@@ -93,7 +93,7 @@ public class DirMonitor : GLib.Object {
                      }
                 }
             } catch (Error e) {
-                print ("Error:%s", e.message);
+                print ("Error comparing dates:%s", e.message);
             }
      }
     
