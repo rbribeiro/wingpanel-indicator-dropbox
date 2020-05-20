@@ -32,4 +32,4 @@ Just a simple Dropbox indicator for **elementary OS**.
  
  ### Uninstall
  - 📦️ From package: `sudo dpkg -r com.github.rbribeiro.wingpanel-indicator-dropbox`
- - ⚙️ From source: On the build directory ``sudo ninja uninstall`
+ - ⚙️ From source: On the build directory ``sudo ninja uninstall``
