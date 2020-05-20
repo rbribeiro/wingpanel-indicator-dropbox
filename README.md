@@ -1,4 +1,5 @@
 ![Dropbox Indicator Header](https://github.com/rbribeiro/wingpanel-indicator-dropbox/blob/master/screenshots/top.png)
+Just a simple Dropbox indicator for **elementary OS**.
 ### Features
 - ✔️ See Dropbox current status
 - 🔎️ Search for files
