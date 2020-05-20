@@ -4,6 +4,8 @@ Just a simple Dropbox indicator for **elementary OS**.
 - ✔️ See Dropbox current status
 - 🔎️ Search for files
 - 🗃️ Recent Activity (see most recent files)
+- 🌍️ Shortchut to Dropbox's website
+- 📂️ Shortcut to your Dropbox folder
 
 ### Requirements
 - The Official Dropbox CLI. You can download it here https://www.dropbox.com/install-linux
