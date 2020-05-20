@@ -4,7 +4,7 @@ Just a simple Dropbox indicator for **elementary OS**.
 - ✔️ See Dropbox current status
 - 🔎️ Search for files
 - 🗃️ Recent Activity (see most recent files)
-- 🌍️ Shortchut to Dropbox's website
+- 🌍️ Shortcut to Dropbox's website
 - 📂️ Shortcut to your Dropbox folder
 
 ### Requirements
