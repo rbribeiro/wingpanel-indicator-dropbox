@@ -2,7 +2,7 @@ using Gtk;
 
 public class RecentFiles : Gtk.Grid {
 
-    private FileEntryList file_list;
+    public FileEntryList file_list;
     private string[] files_string_list;
     private int time_day = 1;
     private int max_results = 7;
@@ -79,11 +79,12 @@ public class RecentFiles : Gtk.Grid {
      public void refresh() {
         string[] result = {""};
         print ("Lets get the recent files then!\n");
+        file_list.set_loading_state (true);
          get_recent_files.begin(dir_path, time_day, (obj, res) => {
              try {
                 print("Lets set the results");
                  result = get_recent_files.end(res);
-                 if (result != null && result[0] != "" && result[0] != null) {
+                 if (result != null && result[0] != "" && result[0] != null && result.length > 0) {
                     print ("Trying to populate\n");
                      file_list.populate (result);
                      print ("setting label\n");
@@ -91,6 +92,7 @@ public class RecentFiles : Gtk.Grid {
                      print ("Showing\n");
                      file_list.title.show();
                      print ("label showed.\n");
+                     file_list.set_loading_state (false);
                  }
              } catch (ThreadError e) {
                  print ("Error refreshing: %s", e.message);
