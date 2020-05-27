@@ -13,6 +13,7 @@ public class FileEntryList : Gtk.Grid {
     
     public Label placeholder;
     public Label title;
+    public bool is_loading = false;
     
     public ListBox listbox;
     
@@ -162,6 +163,7 @@ public class FileEntryList : Gtk.Grid {
      }
      
      public void set_loading_state (bool state) {
+        is_loading = state;
          if (state) {
             spinner.active = true;
             spinner.show();
