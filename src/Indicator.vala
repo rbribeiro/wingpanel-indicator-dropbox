@@ -39,7 +39,12 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
       dir_monitor.changed.connect ((f) => {
           print ("Refreshing the recent files. File changed:"+f.get_name());
           if(popover_wigdet != null) {
-              popover_wigdet.recent_files.refresh ();
+                // Only refresh the file list if it isn't loading/sorting files
+                // this is needed to avoid Segmentation fault error when syncing large amount
+                // of files
+              if(popover_wigdet.recent_files.file_list.is_loading == false) {
+                  popover_wigdet.recent_files.refresh ();
+              }
           }
       });
       
