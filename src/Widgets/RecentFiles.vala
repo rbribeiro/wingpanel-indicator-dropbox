@@ -6,6 +6,7 @@ public class RecentFiles : Gtk.Grid {
     private string[] files_string_list;
     private int time_day = 1;
     private int max_results = 7;
+    private int sort_threshold = 100;
     public string dir_path;
 
     public RecentFiles (string dest_path, int days) {
@@ -36,7 +37,8 @@ public class RecentFiles : Gtk.Grid {
                     file_list.title.show();
                 }
             } catch (ThreadError e) {
-                print (e.message);
+                file_list.set_loading_state (false);
+                print ("Error getting recent files. %s",e.message);
             }
         });
         
@@ -58,7 +60,12 @@ public class RecentFiles : Gtk.Grid {
             files = stdout.split("\n");
             // The last element has to be removed since it is null or empty.
             files = (files.length > 0) ? files[0:files.length-1]: files;
-            sort_files(files, 0, files.length-1);
+            // sort recent files by modication date
+            // since sort is too costly, only sort files if there are less than sort_threshold recent files
+            // This avoid extensive computation
+            if(files.length < sort_threshold) {
+                sort_files(files, 0, files.length-1);
+            }
             files_string_list = files;
 
           } catch (Error e) {
@@ -92,6 +99,8 @@ public class RecentFiles : Gtk.Grid {
                      print ("Showing\n");
                      file_list.title.show();
                      print ("label showed.\n");
+                     file_list.set_loading_state (false);
+                 } else {
                      file_list.set_loading_state (false);
                  }
              } catch (ThreadError e) {
