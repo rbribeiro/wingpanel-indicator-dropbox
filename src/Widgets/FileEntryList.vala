@@ -165,9 +165,20 @@ public class FileEntryList : Gtk.Grid {
      public void set_loading_state (bool state) {
         is_loading = state;
          if (state) {
+            Gtk.Label loading_label = new Gtk.Label ("Loading recent files...");
+           // loading_label.halign = Gtk.Align.CENTER;
+            
+            Gtk.Grid loading_placeholder = new Gtk.Grid();
+            loading_placeholder.orientation = Gtk.Orientation.VERTICAL;
+            loading_placeholder.halign = Gtk.Align.CENTER;
+            loading_placeholder.hexpand = true;
+            
+            loading_placeholder.add (spinner);
+            loading_placeholder.add (loading_label);
             spinner.active = true;
-            spinner.show();
-            listbox.set_placeholder (spinner);
+
+            loading_placeholder.show_all ();
+            listbox.set_placeholder (loading_placeholder);
          } else {
             spinner.active = false;
              listbox.set_placeholder (placeholder);
