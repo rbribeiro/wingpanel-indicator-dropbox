@@ -18,6 +18,7 @@ public class SearchHeader : Gtk.Grid {
            search_entry.placeholder_text = "Search on Dropbox";
            
            Spinner spinner = new Spinner();
+           spinner.margin_start = 6;
            spinner.active = true;
            spin_revealer = new Revealer();
            spin_revealer.transition_type = RevealerTransitionType.SLIDE_LEFT;
@@ -36,7 +37,8 @@ public class SearchHeader : Gtk.Grid {
            open_dropbox_website_button.margin_start = 2;
            open_dropbox_website_button.clicked.connect (open_dropbox_website);
            open_dropbox_website_button.tooltip_text = "Open Dropbox website";
-
+           
+          
            orientation = Gtk.Orientation.HORIZONTAL;
            hexpand = true;
            add (search_entry);
