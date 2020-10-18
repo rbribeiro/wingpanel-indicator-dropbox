@@ -12,4 +12,6 @@ install_data(icon_22_files,
   install_dir: join_paths(system_icons_dir, 'scalable', 'apps')
 )
 
-
+install_subdir('hicolor',
+  install_dir: system_icons_dir,
+)
