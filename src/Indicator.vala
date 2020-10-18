@@ -35,7 +35,9 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
     visible = true;
     service = new Dropbox.Services.Service ();
     GLib.Timeout.add(2000, update, Priority.DEFAULT_IDLE);
-    DirMonitor dir_monitor = new DirMonitor (Dropbox.Services.Service.get_folder_path (), 3000);
+    // Monitoring .dropbox folder is faster
+    string home_dir = GLib.Environment.get_home_dir();
+    DirMonitor dir_monitor = new DirMonitor (home_dir+"/.dropbox/", 3000);
       dir_monitor.changed.connect ((f) => {
           print ("Refreshing the recent files. File changed:"+f.get_name());
           if(popover_wigdet != null) {
