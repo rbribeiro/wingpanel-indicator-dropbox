@@ -73,10 +73,15 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
       string popover_icon_name = popover_wigdet.status_indicator.icon_list[dropbox_status+1];
       popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
       
+      popover_wigdet.close_indicator.connect (on_close_indicator);
     }
     
     return popover_wigdet;
   }
+  
+    private void on_close_indicator () {
+        close();
+    }
 
     public override void opened () {}
 
