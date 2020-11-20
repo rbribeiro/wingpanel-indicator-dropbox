@@ -2,6 +2,7 @@ using Gtk;
 
 public class FileEntryList : Gtk.Grid {
     
+    public signal void activated();
     public string[] files_string_list;
     private IconSize icon_size = IconSize.SMALL_TOOLBAR;
     private string root_path_ignored;
@@ -79,6 +80,7 @@ public class FileEntryList : Gtk.Grid {
         FileEntry file = (FileEntry)row;
         try {
           AppInfo.launch_default_for_uri ("file://"+file.file_path, null);
+          activated();
         } catch (Error e) {
           print (e.message);
         }
