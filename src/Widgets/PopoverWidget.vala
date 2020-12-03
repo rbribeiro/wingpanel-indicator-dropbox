@@ -19,6 +19,7 @@
 using Gtk;
 
 public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
+  public signal void close_indicator ();
   public StatusIndicator status_indicator;
   public Wingpanel.Widgets.Switch theme_switch;
   public RecentFiles recent_files;
@@ -40,11 +41,13 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     search_header = new SearchHeader();
     search_header.search_entry.search_changed.connect(on_search_changed);
     search_header.search_entry.stop_search.connect (on_search_stop);
+    search_header.search_entry.key_press_event.connect(on_search_entry_key_press);
 
     search_results = new FileEntryList(null, dropbox_folder_path, IconSize.DND, false, 10);
     search_results.expand = true;
     search_results.can_focus = true;
     search_results.placeholder.label = "No Results!";
+    search_results.activated.connect(on_file_activated);
     
     stack = new Stack();
     stack.halign = Align.FILL;
@@ -58,6 +61,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     Adjustment vadj2= new Adjustment (300, 150, 300, 0, 0, 300);
     Adjustment vadj= new Adjustment (300, 150, 300, 0, 0, 300);
     
+    
     var scrolledWindow = new Gtk.ScrolledWindow(hadj, vadj);
     scrolledWindow.hscrollbar_policy = Gtk.PolicyType.NEVER;
     scrolledWindow.max_content_height = 500;
@@ -70,6 +74,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     
     recent_files = new RecentFiles(dropbox_folder_path, 3);
     recent_files.halign = Align.FILL;
+    recent_files.file_list.activated.connect(on_file_activated);
     
     scrolledWindowHome.add (recent_files);
     
@@ -84,8 +89,9 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     status_indicator.hexpand = true;
     status_indicator.margin = 6;
     
+    
     add(search_header);
-    add (new Wingpanel.Widgets.Separator ());
+   // add (new Wingpanel.Widgets.Separator ());
     add (stack);
     add (new Wingpanel.Widgets.Separator ());
     add(status_indicator);
@@ -164,10 +170,38 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
    }
    
    private void on_search_stop () {
-     search_header.search_entry.text = "";
-     search_results.remove_all ();
-     stack.visible_child_name = "home";
-     stack.has_focus = true;
+    if(search_header.search_entry.text.length >0) {
+        search_header.search_entry.text = "";
+        search_results.remove_all ();
+        stack.visible_child_name = "home";
+    } else {
+        close_indicator();
+    }
    }
    
+   
+   public bool on_search_entry_key_press (Gdk.EventKey event) {
+        var key = Gdk.keyval_name (event.keyval).replace ("KP_", "");
+
+        switch (key) {
+            case "Down":
+                
+                if(stack.visible_child_name == "search" && search_results.listbox.get_row_at_index(0) != null) {
+                    search_results.listbox.get_row_at_index(0).grab_focus();
+                } else if (stack.visible_child_name == "home" && recent_files.file_list.listbox.get_row_at_index(0) != null){
+                    recent_files.file_list.listbox.get_row_at_index(0).grab_focus();
+                }
+                return Gdk.EVENT_STOP;
+
+        }
+
+        return Gdk.EVENT_PROPAGATE;
+    }
+    
+    private void on_file_activated () {
+        close_indicator();
+    }
+   
 }
+
+ 
