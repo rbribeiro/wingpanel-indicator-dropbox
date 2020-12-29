@@ -8,7 +8,7 @@
 }
 
 .file_entry {
-    padding: 6px 0px 6px 10px
+    padding: 6px 0px 6px 6px
 }
 
 .file_entry:focus, .file_entry:active {
@@ -40,4 +40,8 @@ link, link:active, link:focus,link:hover {
 
 .place_holder_large {
     margin : 10px;
+}
+
+.container {
+    padding: 6px 6px 6px 8px;
 }
