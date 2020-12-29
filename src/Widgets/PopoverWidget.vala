@@ -23,6 +23,7 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
   public StatusIndicator status_indicator;
   public Wingpanel.Widgets.Switch theme_switch;
   public RecentFiles recent_files;
+  public ServiceSwitcher service_switch;
   
   private SearchHeader search_header;
   private FileEntryList search_results;
@@ -89,10 +90,27 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     status_indicator.hexpand = true;
     status_indicator.margin = 6;
     
+    service_switch = new ServiceSwitcher();
+    service_switch.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    service_switch.get_style_context().add_class("container");
+    service_switch.switcher.button_release_event.connect( () => {
+        bool b = service_switch.switcher.state;
+        print(b.to_string());
+        if(!b) {
+            Dropbox.Services.Service.exec_sync_command("dropbox start");
+        } else {
+            Dropbox.Services.Service.exec_sync_command("dropbox stop");
+            
+        };
+        
+        return false;
+    });
     
     add(search_header);
-   // add (new Wingpanel.Widgets.Separator ());
+    add (new Wingpanel.Widgets.Separator ());
     add (stack);
+    add (new Wingpanel.Widgets.Separator ());
+    add (service_switch);
     add (new Wingpanel.Widgets.Separator ());
     add(status_indicator);
     
