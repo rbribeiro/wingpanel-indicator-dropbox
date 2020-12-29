@@ -20,8 +20,9 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
   private Wingpanel.Widgets.OverlayIcon? indicator_icon = null;
   private Dropbox.Widgets.PopoverWidget? popover_wigdet = null;
   private Dropbox.Services.Service service = null;
-  private string dropbox_full_status = "Waiting...";
+  private string dropbox_full_status = "Loading...";
   private int dropbox_status = -1;
+  private bool first_update = false;
 
   public Indicator (Wingpanel.IndicatorManager.ServerType server_type) {
     Object (
@@ -93,9 +94,12 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
         
         if (indicator_icon != null) {
             if(popover_wigdet != null) {
+                first_update = true;
+                bool state = (int.parse(status[1]) > 0) ? true : false;
                 popover_wigdet.status_indicator.set_text (status[0]);
                 popover_icon_name = popover_wigdet.status_indicator.icon_list[int.parse(status[1])+1];
                 popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
+                popover_wigdet.service_switch.state_set(state);
             }
             
         switch (int.parse(status[1])) {
@@ -126,7 +130,8 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
     service.get_status.begin((obj, res) => {
           try {
                 sts = service.get_status.end(res);
-                if(dropbox_full_status != sts[0]) {
+                if(dropbox_full_status != sts[0] || !first_update) {
+                    print(dropbox_full_status);
                     dropbox_full_status = sts[0];
                     dropbox_status = int.parse(sts[1]);
                     set_status (sts);
