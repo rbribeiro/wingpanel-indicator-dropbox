@@ -139,6 +139,17 @@ public async string[] get_status () throws ThreadError {
        }
    }
    
+   public static void exec_sync_command (string command) {
+       //string dropbox_stdout, dropbox_stderr = "";
+       //int dropbox_status = -1;
+       try {
+            Process.spawn_command_line_async (command);
+      
+       } catch (Error e) {
+           print(e.message);
+       }
+   }
+   
 }
 
 
