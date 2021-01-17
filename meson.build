@@ -31,6 +31,7 @@ shared_module(
     'src/Widgets/FileEntry.vala',
     'src/Widgets/FileEntryList.vala',
     'src/Widgets/SearchHeader.vala',
+    'src/Widgets/ServiceSwitcher.vala',
     'src/Services/Dropbox.vala',
     'src/Services/DirMonitor.vala',
     asresources,
