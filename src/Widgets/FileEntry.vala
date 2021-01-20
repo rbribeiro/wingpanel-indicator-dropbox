@@ -7,14 +7,16 @@ public class FileEntry : Gtk.ListBoxRow {
     public Button share_button;
     public Button bookmark_button;
     public TimeVal modification_time;
-    
+
     private Grid grid_buttons;
-    
+
     public FileEntry(string path, string? root_path_ignore, IconSize size){
         var css_provider = new CssProvider();
         css_provider.load_from_resource("io/elementary/wingpanel/dropbox/indicator.css");
         this.get_style_context().add_class("file_entry");
         this.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        this.get_style_context().add_class (Gtk.STYLE_CLASS_MENUITEM);
+
         string only_path = "";
         string path_no_root_folder = "";
         Grid grid = new Gtk.Grid();
@@ -23,17 +25,17 @@ public class FileEntry : Gtk.ListBoxRow {
         try {
             File file =  File.new_for_path (path);
             FileInfo info = file.query_info ("*", 0);
-            
+
             Icon gicon = info.get_icon();
             icon = new Gtk.Image.from_gicon (gicon, size);
             icon.get_style_context().add_class ("file_icon");
-            icon.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);            
+            icon.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             icon.valign = Align.START;
-            
+
             modification_time = info.get_modification_time();
             file_name = info.get_display_name ();
             only_path = file_path.split(file_name)[0];
-            
+
             if(root_path_ignore != null && root_path_ignore != "") {
                 path_no_root_folder = only_path.split(root_path_ignore)[1];
             }
@@ -67,24 +69,24 @@ public class FileEntry : Gtk.ListBoxRow {
         file_path_label.get_style_context().add_class ("path_text");
         file_path_label.get_style_context().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         file_path_label.set_markup ("<a href='file://"+only_path+"'><span underline='none'>."+path_no_root_folder+"</span></a>");
-        
+
         share_button = new Button.from_icon_name ("emblem-shared", IconSize.SMALL_TOOLBAR);
         share_button.hexpand = false;
         share_button.halign = Align.END;
         share_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        
+
         bookmark_button = new Button.from_icon_name ("non-starred", IconSize.SMALL_TOOLBAR);
         bookmark_button.hexpand = false;
         bookmark_button.halign = Align.END;
         bookmark_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        
+
         grid_buttons = new Grid ();
         grid_buttons.orientation = Orientation.HORIZONTAL;
         grid_buttons.halign = Align.END;
         grid_buttons.add (bookmark_button);
         grid_buttons.add (share_button);
         grid_buttons.no_show_all = true;
-        
+
         file_attr_grid.add (file_name_label);
         file_attr_grid.add (file_path_label);
 
@@ -99,9 +101,9 @@ public class FileEntry : Gtk.ListBoxRow {
   public string get_file_path() {
     return file_path;
   }
-  
+
   public void toggle_share_buttons () {
-    
+
     if (grid_buttons.visible == true) {
       grid_buttons.no_show_all = true;
       grid_buttons.hide ();
