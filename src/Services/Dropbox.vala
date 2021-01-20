@@ -102,7 +102,7 @@ public async string[] get_status () throws ThreadError {
 
         } catch (Error e) {
             print (e.message);
-            result[0] = "Dropbox process not found...";
+            result[0] = "Failed to get dropbox status";
         }
         
         Idle.add((owned)callback);
