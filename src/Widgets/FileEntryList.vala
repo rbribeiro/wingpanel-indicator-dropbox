@@ -29,8 +29,8 @@ public class FileEntryList : Gtk.Grid {
         spinner.active = true;
         
         listbox = new ListBox();
-        listbox.activate_on_single_click = false;
-        listbox.row_activated.connect(double_click);
+        listbox.activate_on_single_click = true;
+        listbox.row_activated.connect(on_activate);
         listbox.hexpand = true;
         
         if (sorted) {
@@ -75,7 +75,7 @@ public class FileEntryList : Gtk.Grid {
         
     }
     
-    private void double_click (ListBoxRow row) {
+    private void on_activate (ListBoxRow row) {
       if(row is FileEntry) {
         FileEntry file = (FileEntry)row;
         try {
