@@ -11,31 +11,19 @@
     padding: 6px 0px 6px 6px
 }
 
-.file_entry:focus, .file_entry:active {
-  background-color : #d4d4d4
-}
-.file_entry:hover {
-  background-color : #d4d4d4
-    
-}
-
 .file_icon {
     margin-right: 6px
 }
 
 .file_text {
   font-size: 12px;
-  color: #000
+}
 
-}
 .path_text {
-  color : #666;
   font-size: 10px;
- 
 }
+
 link, link:active, link:focus,link:hover {
-    color: #666;
-   
 }
 
 .place_holder_large {
