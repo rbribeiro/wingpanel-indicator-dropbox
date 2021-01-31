@@ -152,7 +152,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
  */
 public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType server_type) {
     /* A small message for debugging reasons */
-    debug ("Activating Sample Indicator");
+    debug ("Activating Dropbox Indicator");
 
     /* Check which server has loaded the plugin */
     if (server_type != Wingpanel.IndicatorManager.ServerType.SESSION) {
