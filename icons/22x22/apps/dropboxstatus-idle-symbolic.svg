@@ -12,7 +12,7 @@
    width="22"
    version="1.1"
    id="svg4"
-   sodipodi:docname="dropboxstatus-logo-dark.svg"
+   sodipodi:docname="dropboxstatus-idle-symbolic.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata10">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -37,21 +37,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="712"
-     inkscape:window-height="480"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview6"
      showgrid="false"
      inkscape:zoom="10.727273"
-     inkscape:cx="11"
+     inkscape:cx="-3.4957624"
      inkscape:cy="11"
      inkscape:window-x="0"
      inkscape:window-y="30"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg4" />
   <path
-     d="M7 3.002l-5 3 4 2.984-4.01 3.008L7 15.002l4-3-5-3 5-3 5 3.015-5 2.985 4 3 5.01-3.024L16 9.002l4-3-5-3-4 2.984-4-2.984zm4 10l-4 3-1-.6v.6l5 3 5-3v-.604l-1 .604-4-3z"
-     color="#000"
-     fill="#ffffff"
+     d="m 7.4483905,3.9999998 -4.4395116,2.625 3.5516092,2.611 L 2.9999999,11.868 7.4483906,14.5 11,11.875 6.5604881,9.2499998 11,6.6249998 15.439512,9.2631248 11,11.875 14.551609,14.5 19,11.854 15.439512,9.2499998 l 3.551609,-2.625 -4.439512,-2.625 L 11,6.6109998 Z M 11,12.75 7.4483905,15.375 6.5604881,14.85 v 0.525 L 11,18 15.439512,15.375 v -0.5285 l -0.887903,0.5285 z"
      id="path2"
-     style="fill:#000000" />
+     style="color:#000000;fill:#000000;stroke-width:0.88142759"
+     inkscape:connector-curvature="0" />
 </svg>
