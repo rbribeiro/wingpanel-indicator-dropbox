@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="22"
-   viewBox="0 0 22 22"
-   width="22"
+   height="16"
+   viewBox="0 0 16 16"
+   width="16"
    version="1.1"
    id="svg4"
-   sodipodi:docname="dropboxstatus-logo-dark.svg"
+   sodipodi:docname="dropboxstatus-symbolic.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata10">
@@ -37,21 +37,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="712"
-     inkscape:window-height="480"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview6"
      showgrid="false"
      inkscape:zoom="10.727273"
-     inkscape:cx="11"
+     inkscape:cx="-3.4025421"
      inkscape:cy="11"
      inkscape:window-x="0"
      inkscape:window-y="30"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg4" />
   <path
-     d="M7 3.002l-5 3 4 2.984-4.01 3.008L7 15.002l4-3-5-3 5-3 5 3.015-5 2.985 4 3 5.01-3.024L16 9.002l4-3-5-3-4 2.984-4-2.984zm4 10l-4 3-1-.6v.6l5 3 5-3v-.604l-1 .604-4-3z"
-     color="#000"
-     fill="#ffffff"
+     d="M 4.4539512,1.1 0.0088901,3.725 3.564939,6.336 0,8.968 4.4539512,11.6 8.01,8.975 3.564939,6.35 8.01,3.725 12.455061,6.363125 8.01,8.975 11.566049,11.6 16.02,8.954 12.455061,6.35 16.01111,3.725 11.566049,1.1 8.01,3.711 Z M 8.01,9.85 4.4539512,12.475 3.564939,11.95 v 0.525 L 8.01,15.1 12.455061,12.475 v -0.5285 l -0.889012,0.5285 z"
      id="path2"
-     style="fill:#000000" />
+     style="color:#000000;fill:#000000;stroke-width:0.88197827"
+     inkscape:connector-curvature="0" />
 </svg>
