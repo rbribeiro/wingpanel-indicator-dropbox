@@ -23,6 +23,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
   private string dropbox_full_status = "Loading...";
   private int dropbox_status = -1;
   private bool first_update = false;
+  private int syncing_icon = 1;
 
   public Indicator (Wingpanel.IndicatorManager.ServerType server_type) {
     Object (
@@ -89,6 +90,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
     public override void closed () {}
 
     private void set_status (string[] status) {
+
         string indicator_icon_name = "dropboxstatus-stopped-symbolic";
         string popover_icon_name = "process-stop-symbolic";
         
@@ -112,7 +114,13 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
             break;
 
           case Dropbox.Services.Service.DROP_BOX_STATUS_SYNCING:
-            indicator_icon_name = "dropboxstatus-busy-symbolic";
+            if (syncing_icon == 1) {
+              indicator_icon_name = "dropboxstatus-busy-symbolic";
+              syncing_icon = 2;
+            } else {
+              indicator_icon_name = "dropboxstatus-busy2-symbolic";
+              syncing_icon = 1;
+            }
             break;
 
           case Dropbox.Services.Service.DROP_BOX_STATUS_UPTODATE:
@@ -131,7 +139,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
           try {
                 sts = service.get_status.end(res);
                 if(dropbox_full_status != sts[0] || !first_update) {
-                    print(dropbox_full_status);
+                    debug(dropbox_full_status);
                     dropbox_full_status = sts[0];
                     dropbox_status = int.parse(sts[1]);
                     set_status (sts);
