@@ -107,11 +107,11 @@ public class Dropbox.Widgets.PopoverWidget : Gtk.Grid {
     });
     
     add(search_header);
-    add (new Wingpanel.Widgets.Separator ());
+    add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
     add (stack);
-    add (new Wingpanel.Widgets.Separator ());
+    add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
     add (service_switch);
-    add (new Wingpanel.Widgets.Separator ());
+    add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
     add(status_indicator);
     
   }
