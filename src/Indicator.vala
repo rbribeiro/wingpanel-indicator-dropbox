@@ -27,9 +27,9 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
 
   public Indicator (Wingpanel.IndicatorManager.ServerType server_type) {
     Object (
-      code_name: "wingpanel-indicator-dropbox",
-      display_name: _("Dropbox"),
-      description: _("The dropbox indicator")
+      code_name: "wingpanel-indicator-dropbox"
+     // display_name: _("Dropbox"),
+      //description: _("The dropbox indicator")
     );
   }
 
@@ -51,7 +51,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
               }
           }
       });
-      
+
       dir_monitor.run();
 
   }
@@ -74,13 +74,13 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
       popover_wigdet.status_indicator.set_text (dropbox_full_status);
       string popover_icon_name = popover_wigdet.status_indicator.icon_list[dropbox_status+1];
       popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
-      
+
       popover_wigdet.close_indicator.connect (on_close_indicator);
     }
-    
+
     return popover_wigdet;
   }
-  
+
     private void on_close_indicator () {
         close();
     }
@@ -93,7 +93,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
 
         string indicator_icon_name = "dropboxstatus-stopped-symbolic";
         string popover_icon_name = "process-stop-symbolic";
-        
+
         if (indicator_icon != null) {
             if(popover_wigdet != null) {
                 first_update = true;
@@ -103,7 +103,7 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
                 popover_wigdet.status_indicator.set_icon_from_name(popover_icon_name);
                 popover_wigdet.service_switch.state_set(state);
             }
-            
+
         switch (int.parse(status[1])) {
           case Dropbox.Services.Service.DROP_BOX_STATUS_UNKNOWN:
             indicator_icon_name = "dropboxstatus-stopped-symbolic";
@@ -131,10 +131,10 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
 
         }
     }
-    
+
     public bool update () {
     string[] sts = {"", ""};
-  
+
     service.get_status.begin((obj, res) => {
           try {
                 sts = service.get_status.end(res);
@@ -144,12 +144,12 @@ public class Dropbox.Indicator : Wingpanel.Indicator {
                     dropbox_status = int.parse(sts[1]);
                     set_status (sts);
                 }
-                
+
           } catch (ThreadError e) {
               print("Error getting dropbox status: %s",e.message);
           }
       });
-  
+
     return true;
     }
 }
