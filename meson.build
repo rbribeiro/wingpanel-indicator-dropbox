@@ -20,7 +20,7 @@ source_dir: 'data',
 c_name: 'as'
 )
 
-wingpanel_dep = dependency('wingpanel-2.0')
+wingpanel_dep = dependency('wingpanel')
 
 shared_module(
     meson.project_name(),
