@@ -12,11 +12,13 @@ Just a simple Dropbox indicator for **elementary OS**.
 - ⚠️ Your Dropbox setup must be working, that is, you must be signed in with your dropbox account.
 
 ### Install 
-- 📦️ [Download](https://github.com/rbribeiro/wingpanel-indicator-dropbox/raw/master/packages/com.github.rbribeiro.wingpanel-indicator-dropbox_0.1_amd64.deb) .deb package and run
-
-``sudo dpkg -i com.github.rbribeiro.wingpanel-indicator-dropbox_0.1_amd64.deb``
-
 - ⚙️ Compile from source:
+
+Install the eOS sdk
+
+``sudo apt install elementary-sdk``
+
+Clone the repository
 
  ``git clone https://github.com/rbribeiro/wingpanel-indicator-dropbox.git``
  
@@ -31,5 +33,4 @@ Just a simple Dropbox indicator for **elementary OS**.
  `sudo ninja install`
  
  ### Uninstall
- - 📦️ From package: `sudo dpkg -r com.github.rbribeiro.wingpanel-indicator-dropbox`
  - ⚙️ From source: On the build directory ``sudo ninja uninstall``
